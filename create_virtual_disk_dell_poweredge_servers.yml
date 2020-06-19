@@ -1,0 +1,43 @@
+---
+- name: reset NGM
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+  - name: Create BOSS disk
+    uri:
+      url: 'https://<iDRAC_IP>/redfish/v1/Systems/System.Embedded.1/Storage/AHCI.Integrated.1-1/Volumes'
+      user: root
+      password: calvin
+      method: POST
+      state: "present"
+      block_size_bytes: 512
+      optimum_io_size_bytes: 65536
+      encryption_types: NativeDriveEncryption
+      encrypted: true
+      body: {"VolumeType": "Mirrored","Name": "VD_R1_1","Drives": [{"@odata.id": "/redfish/v1/Systems/System.Embedded.1/Storage/Drives/Disk.Direct.0-0:AHCI.Integrated.1-1"},{"@odata.id": "/redfish/v1/Systems/System.Embedded.1/Storage/Drives/Disk.Direct.1-1:AHCI.Integrated.1-1"}]}
+      body_format: json
+      headers:
+          Content-Type: "application/json"
+          Accept: "application/json"
+      validate_certs: no
+      status_code: 202
+    register: result
+    ignore_errors: yes
+
+  - name: restart blade
+    uri:
+      url: https://<iDRAC_IP>/redfish/v1/Systems/System.Embedded.1/Actions/ComputerSystem.Reset
+      user: root
+      password: calvin
+      method: POST
+      body:
+        ResetType: ForceRestart
+      body_format: json
+      headers:
+          Content-Type: "application/json"
+          Accept: "application/json"
+      validate_certs: no
+      status_code: 204
+    ignore_errors: yes
