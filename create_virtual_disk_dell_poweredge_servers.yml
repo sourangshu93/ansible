@@ -1,5 +1,5 @@
 ---
-- name: reset NGM
+- name: Create Virtual Disk
   hosts: localhost
   connection: local
   gather_facts: False
@@ -16,7 +16,7 @@
       optimum_io_size_bytes: 65536
       encryption_types: NativeDriveEncryption
       encrypted: true
-      body: {"VolumeType": "Mirrored","Name": "VD_R1_1","Drives": [{"@odata.id": "/redfish/v1/Systems/System.Embedded.1/Storage/Drives/Disk.Direct.0-0:AHCI.Integrated.1-1"},{"@odata.id": "/redfish/v1/Systems/System.Embedded.1/Storage/Drives/Disk.Direct.1-1:AHCI.Integrated.1-1"}]}
+      body: {"VolumeType": "Mirrored","Name": "VD_R1","Drives": [{"@odata.id": "/redfish/v1/Systems/System.Embedded.1/Storage/Drives/Disk.Direct.0-0:AHCI.Integrated.1-1"},{"@odata.id": "/redfish/v1/Systems/System.Embedded.1/Storage/Drives/Disk.Direct.1-1:AHCI.Integrated.1-1"}]}
       body_format: json
       headers:
           Content-Type: "application/json"
