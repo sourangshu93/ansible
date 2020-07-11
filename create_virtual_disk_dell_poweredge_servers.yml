@@ -1,3 +1,5 @@
+### While running the script provide the iDRAC IP address as extra variable run the playbook like: 
+### >> ansible-playbook create_virtual_disk_dell_poweredge_servers.yml --extra-vars "idrac_ip=192.168.101.100"
 ---
 - name: Create Virtual Disk
   hosts: localhost
@@ -7,7 +9,7 @@
   tasks:
   - name: Create BOSS disk
     uri:
-      url: 'https://<iDRAC_IP>/redfish/v1/Systems/System.Embedded.1/Storage/AHCI.Integrated.1-1/Volumes'
+      url: 'https://{{ idrac_ip }}/redfish/v1/Systems/System.Embedded.1/Storage/AHCI.Integrated.1-1/Volumes'
       user: root
       password: calvin
       method: POST
@@ -28,7 +30,7 @@
 
   - name: restart blade
     uri:
-      url: https://<iDRAC_IP>/redfish/v1/Systems/System.Embedded.1/Actions/ComputerSystem.Reset
+      url: https://{{ idrac_ip }}/redfish/v1/Systems/System.Embedded.1/Actions/ComputerSystem.Reset
       user: root
       password: calvin
       method: POST
